@@ -249,4 +249,95 @@ public class Utility {
 		}
 		return frequent_sets;
 	}
+	
+	//template1
+	public boolean checkCondition(Set<String> ruleSet, Set<String> bodySet, Set<String> headSet)
+	{
+		//rule : procedure and diagnosis set
+		//body: procedure set
+		//head: diagnosis set
+		
+		/**remove them when add to its place */
+			String setType = null;
+			Set<String> items = null;
+			String condition = null;
+		/** -------*/
+		
+		boolean result = false;
+		Set<String> requiredSet = null;
+		
+		if(setType.equalsIgnoreCase("Rule"))
+			requiredSet = ruleSet;
+		
+		else if(setType.equalsIgnoreCase("body"))
+			requiredSet = bodySet;
+		
+		else if(setType.equalsIgnoreCase("head"))
+			requiredSet = headSet;
+		
+		int count = Utility.GetIntersectionCount(items,requiredSet);
+		
+		if(condition.equalsIgnoreCase("any"))
+		{
+			if(count > 0)
+				result = true;
+		}
+		
+		else if(condition.equalsIgnoreCase("none"))
+		{
+			if(count == 0)
+				result = true;
+		}
+		
+		else
+		{
+			int number = Integer.parseInt(condition);
+			
+			if(count == number)
+				result = true;
+		}
+		
+		return result;
+	}
+	
+	//template2
+	public boolean checkCondition(Set<String> ruleSet, Set<String> bodySet, Set<String> headSet)
+	{
+		//rule : procedure and diagnosis set
+		//body: procedure set
+		//head: diagnosis set
+		
+		/**remove them when add to its place */
+			String setType = null;
+			Set<String> items = null;
+			String condition = null;
+		/** -------*/
+		
+		boolean result = false;
+		int sizeOfset = 0;
+		
+		Set<String> requiredSet = null;
+
+		if(setType.equalsIgnoreCase("Rule"))
+			requiredSet = ruleSet;
+		
+		else if(setType.equalsIgnoreCase("body"))
+			requiredSet = bodySet;
+		
+		else if(setType.equalsIgnoreCase("head"))
+			requiredSet = headSet;
+			
+		sizeOfset = requiredSet.size();
+		
+		Iterator<String> itr = items.iterator();
+		String str = itr.next();
+
+		if(condition.equalsIgnoreCase(">="))
+		{
+			int number = Integer.parseInt(str);
+			if(sizeOfset >= number)
+				result = true;
+		}		
+		return result;
+	}
 }
