@@ -239,4 +239,14 @@ public class Utility {
 		}
 		return association_sets;
 	}	
+	
+	static Set<Set<String>> RemoveSetsNotSatisfyingTemplateRules(Set<Set<String>> frequent_sets, TemplateRules templates) {
+		Iterator<Set<String>> itr = frequent_sets.iterator();
+		while(itr.hasNext()) {
+			Set<String> set = itr.next();
+			if(templates.VerifyRules(set) == false)
+				itr.remove();
+		}
+		return frequent_sets;
+	}
 }

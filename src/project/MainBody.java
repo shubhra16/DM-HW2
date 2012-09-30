@@ -32,6 +32,13 @@ public class MainBody {
 			if(association_sets.size() == 0)
 				break;
 		}
+		
+		// Apply template rules
+		TemplateRules templates;
+		templates.SetProcedureSet(procedures_set);
+		templates.SetDiagnosisSet(diagnosis_set);
+		frequent_sets = Utility.RemoveSetsNotSatisfyingTemplateRules(frequent_sets, templates);
+		
 		System.out.print("\nTotal number of frequent sets : " + frequent_sets.size());
 	}
 }
