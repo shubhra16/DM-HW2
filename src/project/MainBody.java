@@ -35,9 +35,7 @@ public class MainBody {
 		
 		// Apply template rules
 		TemplateRules templates;
-		templates.SetProcedureSet(procedures_set);
-		templates.SetDiagnosisSet(diagnosis_set);
-		frequent_sets = Utility.RemoveSetsNotSatisfyingTemplateRules(frequent_sets, templates);
+		frequent_sets = Utility.RemoveSetsNotSatisfyingTemplateRules(frequent_sets, procedures_set, diagnosis_set, templates);
 		
 		System.out.print("\nTotal number of frequent sets : " + frequent_sets.size());
 	}

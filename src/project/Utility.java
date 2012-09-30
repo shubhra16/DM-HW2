@@ -240,13 +240,44 @@ public class Utility {
 		return association_sets;
 	}	
 	
-	static Set<Set<String>> RemoveSetsNotSatisfyingTemplateRules(Set<Set<String>> frequent_sets, TemplateRules templates) {
+	static Set<Set<String>> RemoveSetsNotSatisfyingTemplateRules(Set<Set<String>> frequent_sets, Set<String> procedure_set, Set<String> diagnosis_set, TemplateRules templates) {
 		Iterator<Set<String>> itr = frequent_sets.iterator();
 		while(itr.hasNext()) {
-			Set<String> set = itr.next();
-			if(templates.VerifyRules(set) == false)
+			Set<String> rule = itr.next();
+			Set<String> body = GetProcedureItems(rule, procedure_set);
+			Set<String> head = new HashSet<String> (rule);
+			head.removeAll(body);
+			
+			if(templates.VerifyRules(rule, body, head) == false)
 				itr.remove();
 		}
 		return frequent_sets;
+	}
+	
+	boolean VerifyRules(Set<String> rule, Set<String> body, Set<String> head) {
+		if(templates.size() == 0)
+			return true;
+	
+		boolean verified_so_far = true;
+		
+		for(int template_index = 0 ; template_index < templates.size() && verified_so_far == true; template_index++) {
+			boolean is_verified = templates.getIndex(template_index).CheckCondition(rule, body, head);
+			if(template_index == 0)
+				verified_so_far = is_verified;
+			else
+				verified_so_far = ApplyLogicalSeparator(verified_so_far, is_verified, logical_separator[template_index-1]);
+		}
+		return verified_so_far;
+	}
+	
+	boolean ApplyLogicalSeparator(boolean flag1, boolean flag2, String separator) {
+		boolean result = false;
+		if(separator.equals("and")) {
+			result =  flag1 && flag2;
+		}
+		else if(separator.equals("or")) {
+			result = flag1 || flag2;
+		}
+		return result;
 	}
 }
