@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.regex.Pattern;
-
-
 
 public class ProcessCommand {
 	TemplateRules returnTempplates(String command) throws Exception
@@ -41,8 +37,8 @@ public class ProcessCommand {
 			
 		}
 		commands.add(stringTillNow);
-		System.out.println(separators);
-		System.out.println(commands);
+		//System.out.println(separators);
+		//System.out.println(commands);
 		Iterator<String> commandItr=commands.iterator();
 		while(commandItr.hasNext())
 		{
@@ -51,8 +47,8 @@ public class ProcessCommand {
 			givenTemplate.populateData(currentCommand);
 			templateToBeReturned.add(givenTemplate);
 		}
-		templateRulesToBeReturned.templates=templateToBeReturned;
-		templateRulesToBeReturned.logicalSeparator=separators;
+		templateRulesToBeReturned.templates=(ArrayList<Template>)templateToBeReturned;
+		templateRulesToBeReturned.logicalSeparator=(ArrayList<String>)separators;
 		return templateRulesToBeReturned;
 	}
 	public static void main(String args[]) throws Exception

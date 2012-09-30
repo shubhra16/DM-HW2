@@ -1,7 +1,6 @@
 package project;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -56,9 +55,9 @@ public class Template1 implements Template{
 			{
 				String strItems=currentElement;
 				String str[]=strItems.split(",");
+				items=new HashSet<String>();
 				for(int i=0;i<str.length;i++)
 				{
-					items=new HashSet<String>();
 					items.add(str[i]);
 				}
 				
@@ -69,15 +68,47 @@ public class Template1 implements Template{
 			
 	}
 	
-	@Override
-	public boolean checkCondition() {
-		// TODO Auto-generated method stub
-		return false;
+	//template1
+	public boolean checkCondition(Set<String> ruleSet, Set<String> bodySet, Set<String> headSet)
+	{
+		//rule : procedure and diagnosis set
+		//body: procedure set
+		//head: diagnosis set
+		
+		boolean result = false;
+		Set<String> requiredSet = null;
+		
+		if(setType.equalsIgnoreCase("Rule"))
+			requiredSet = ruleSet;
+		else if(setType.equalsIgnoreCase("body"))
+			requiredSet = bodySet;
+		else if(setType.equalsIgnoreCase("head"))
+			requiredSet = headSet;
+		
+		int count = Utility.GetIntersectionCount(items,requiredSet);
+		
+		if(condition.equalsIgnoreCase("any"))
+		{
+			if(count > 0)
+				result = true;
+		}
+		else if(condition.equalsIgnoreCase("none"))
+		{
+			if(count == 0)
+				result = true;
+		}	
+		else
+		{
+			int number = Integer.parseInt(condition);
+			
+			if(count == number)
+				result = true;
+		}
+		
+		return result;
 	}
 	public static void main(String args[])
 	{
 	  
 	}
-	
-
 }
