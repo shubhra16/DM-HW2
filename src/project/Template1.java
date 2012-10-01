@@ -9,63 +9,45 @@ public class Template1 implements Template{
 	String condition;
 	Set<String> items;
 
-	@Override
 	public void populateData(String command) throws Exception {
-		StringTokenizer currentElementToken=new StringTokenizer(command," \t()");
-		int count=1;
-		while(currentElementToken.hasMoreElements())
-		{
-			String currentElement=currentElementToken.nextToken();
-			if (currentElement.equals(" "))
-				continue;
-			currentElement=currentElement.replaceAll(" ", "");
-			if(count==1)
-			{
-				if(currentElement.equalsIgnoreCase("rule")||currentElement.equalsIgnoreCase("body")||currentElement.equalsIgnoreCase("head"))
-				{
-					setType=currentElement;
-				}
-				else throw new Exception("Syntax Error");
-				
+		command = command.trim();
+		String tokens[] = command.split("[ \t]", 5);
+		
+		// Check size
+		if(tokens.length != 5)
+			throw new Exception("Syntax Error");
+		
+		// Check head/body/rule
+		setType = tokens[0];
+		if(! (setType.equalsIgnoreCase("HEAD") || setType.equalsIgnoreCase("BODY") || setType.equalsIgnoreCase("RULE")) )
+			throw new Exception("Syntax Error");
+		
+		// Check has
+		if(! (tokens[1].equalsIgnoreCase("has")) )
+			throw new Exception("Syntax Error");
+		
+		// Check condition
+		condition = tokens[2].split("[()]")[1];
+		if(! (condition.equalsIgnoreCase("ANY") || condition.equalsIgnoreCase("NONE")) ) {
+			try {
+				Integer.parseInt(condition);
 			}
-			if(count==2)
-			{
-				if(!(currentElement.equalsIgnoreCase("has")))
-				{
-					throw new Exception("Syntax Error");
-				}
-									
+			catch(Exception e) {
+				throw new Exception("Syntax Error");
 			}
-			if(count==3)
-			{
-				
-				condition=currentElement;
-				
-			}
-			if(count==4)
-			{
-				if(!(currentElement.equalsIgnoreCase("of")))
-				{
-					throw new Exception("Syntax Error");
-				}
-				
-					
-			}
-			if(count==5)
-			{
-				String strItems=currentElement;
-				String str[]=strItems.split(",");
-				items=new HashSet<String>();
-				for(int i=0;i<str.length;i++)
-				{
-					items.add(str[i]);
-				}
-				
-			}
-			count++;
-			  
 		}
-			
+		
+		// Check of
+		if(! (tokens[3].equalsIgnoreCase("of")) )
+			throw new Exception("Syntax Error");
+		
+		// Check items
+		String items_tokens[]=tokens[4].split("[(),]");
+		items=new HashSet<String>();
+		for(int i=1;i<items_tokens.length;i++)
+		{
+			items.add(items_tokens[i].trim());
+		}	
 	}
 	
 	//template1
@@ -78,11 +60,11 @@ public class Template1 implements Template{
 		boolean result = false;
 		Set<String> requiredSet = null;
 		
-		if(setType.equalsIgnoreCase("Rule"))
+		if(setType.equalsIgnoreCase("RULE"))
 			requiredSet = ruleSet;
-		else if(setType.equalsIgnoreCase("body"))
+		else if(setType.equalsIgnoreCase("BODY"))
 			requiredSet = bodySet;
-		else if(setType.equalsIgnoreCase("head"))
+		else if(setType.equalsIgnoreCase("HEAD"))
 			requiredSet = headSet;
 		
 		int count = Utility.GetIntersectionCount(items,requiredSet);

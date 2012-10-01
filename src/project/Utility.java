@@ -55,6 +55,13 @@ public class Utility {
 		System.out.print("\n");
 	}
 	
+	static void PrintFrequentSets(Set<Set<String>> sets) {
+		Iterator<Set<String>> itr = sets.iterator();
+		while(itr.hasNext()) {
+			System.out.print("\n" + itr.next());
+		}
+	}
+	
 	static ArrayList<Set<String>> GetSampleSets(Map<String, ArrayList<String>> data) {
 		ArrayList<Set<String>> sample_sets = new ArrayList<Set<String>>();
 		for(ArrayList<String> sample : data.values()) {
@@ -182,6 +189,8 @@ public class Utility {
 	public static int GetIntersectionCount(Set<String> itemSet, Set<String> totalItemSet)
 	{
 		int count = 0;
+		if(itemSet == null || totalItemSet == null)
+			return count;
 		
 		Iterator<String> itrOnItemSet = itemSet.iterator();
 		while(itrOnItemSet.hasNext())

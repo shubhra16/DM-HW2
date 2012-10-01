@@ -45,47 +45,31 @@ public class Template2 implements Template{
 
 	@Override
 	public void populateData(String command) throws Exception {
-		StringTokenizer currentElementToken=new StringTokenizer(command," \t()");
-		int count=1;
-		while(currentElementToken.hasMoreElements())
-		{
-			String currentElement=currentElementToken.nextToken();
-			if (currentElement.equals(" ") || currentElement.equalsIgnoreCase("SizeOf"))
-				continue;
-			
-			currentElement=currentElement.replaceAll(" ", "");
-			if(count==1)
-			{
-				if(currentElement.equalsIgnoreCase("rule")||currentElement.equalsIgnoreCase("body")||currentElement.equalsIgnoreCase("head"))
-				{
-					setType=currentElement;
-				}
-				else throw new Exception("Syntax Error");
+		command = command.trim();
+		String tokens[] = command.split("[ \t()]");
+		
+		// Check size
+		if(tokens.length != 5)
+			throw new Exception("Syntax Error");
+		
+		// Check has
+		if(! (tokens[0].equalsIgnoreCase("SizeOf")) )
+			throw new Exception("Syntax Error");
 				
-			}
-			if(count==2)
-			{
-				if(!(currentElement.equalsIgnoreCase(">=")))
-				{
-					throw new Exception("Syntax Error");
-				}
-				condition=currentElement;
-									
-			}
-			if(count==3)
-			{
-				String strItems=currentElement;
-				String str[]=strItems.split(",");
-				for(int i=0;i<str.length;i++)
-				{
-					items=new HashSet<String>();
-					items.add(str[i]);
-				}
-				
-			}
-			count++;
-			  
-		}
+		// Check head/body/rule
+		setType = tokens[1];
+		if(! (setType.equalsIgnoreCase("HEAD") || setType.equalsIgnoreCase("BODY") || setType.equalsIgnoreCase("RULE")) )
+			throw new Exception("Syntax Error");
+		
+		// Skip null
+		
+		// Check condition
+		condition = tokens[3];
+		if(! (condition.equalsIgnoreCase(">=")) )
+			throw new Exception("Syntax Error");
+		
+		// Check item
+		items=new HashSet<String>();
+		items.add(tokens[4]);
 	}
-
 }

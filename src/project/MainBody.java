@@ -11,8 +11,23 @@ public class MainBody {
 		int support = 30;
 		int confidence = 50;
 		Map<String, ArrayList<String>> totalData=Utility.readFile("./association-rule-test-data.txt");
-		String userInput = "HEAD has (1) OF (ALL101,AML101) AND BODY HAS (NONE) OF (DISEASE)";
-		String userInput1 = "BODY HAS (ANY) OF (UP1,DOWN24,UP33)";
+		String userInput1 = "HEAD HAS (ANY) OF ()";
+		String userInput2 = "HEAD HAS (ANY) OF (ALL101)";
+		String userInput3 = "HEAD HAS (ANY) OF (ALL101, Breast Cancer101)";
+		String userInput4 = "HEAD HAS (1) OF ()";
+		String userInput5 = "HEAD HAS (1) OF (ALL101)";
+		String userInput6 = "HEAD HAS (1) OF (ALL101, AML101)";
+		String userInput7 = "HEAD HAS (NONE) OF ()";
+		String userInput8 = "HEAD HAS (NONE) OF (ALL101)";
+		String userInput9 = "HEAD HAS (NONE) OF (ALL101, Breast Cancer101)";
+		String userInput10 = "SizeOf(HEAD) >= 1";
+		String userInput11 = "SizeOf(HEAD) >= 2";
+		String userInput12 = "SizeOf(BODY) >= 0";
+		String userInput13 = "SizeOf(BODY) >= 2";
+		String userInput14 = "SizeOf(BODY) >= 8";
+		String userInput15 = "SizeOf(RULE) >= 0";
+		String userInput16 = "SizeOf(RULE) >= 2";
+		String userInput17 = "SizeOf(RULE) >= 8";
 		
 		// Get sample and element sets
 		ArrayList<Set<String>> sample_sets = Utility.GetSampleSets(totalData);
@@ -30,14 +45,13 @@ public class MainBody {
 				association_sets = Utility.RemoveLowConfidenceSets(association_sets, sample_sets, procedures_set, confidence);
 				frequent_sets.addAll(association_sets);
 			}
-			Utility.PrintAssociationSets(association_sets, sample_sets, level);
 			if(association_sets.size() == 0)
 				break;
 		}
 		
 		// Apply template rules
 		ProcessCommand user_input_processor = new ProcessCommand();
-		TemplateRules template_rules = user_input_processor.returnTempplates(userInput1);
+		TemplateRules template_rules = user_input_processor.returnTempplates(userInput15);
 		frequent_sets = Utility.RemoveSetsNotSatisfyingTemplateRules(frequent_sets, procedures_set, diagnosis_set, template_rules);
 		
 		System.out.print("\nTotal number of frequent sets : " + frequent_sets.size());
